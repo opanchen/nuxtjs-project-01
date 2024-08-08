@@ -6,6 +6,28 @@ definePageMeta({
     middleware: 'auth'
 })
 
+// Composable to configure page meta
+// useHead({
+//     title: 'My Nuxt App | Home',
+//     meta: [
+//         { name: 'description', content: 'My amazing site.' },
+//         { name: "keywords", content: 'Nuxt.js, Vue.js, JavaScript' },
+
+//     ],
+//     bodyAttrs: {
+//         class: 'test'
+//     },
+//     script: [{ children: 'console.log(\"Hello world from page meta (useHead)"\)' }]
+// })
+
+const response = await $fetch('/api/hello')
+console.log('[SERVER_RESPONSE]: ', response);
+
+const { data: productCount, pending, status } = await useAsyncData('products', () => $fetch("/api/products"))
+
+const refresh = () => refreshNuxtData('products')
+
+
 // Create a reactive state and set default value
 // const counter = useState('counter', () => Math.round(Math.random() * 100))
 // Use shared state
@@ -31,8 +53,13 @@ sayHello();
         <Profile /> -->
         <h1>Home page</h1>
 
-        <ContentDoc />
+        <!-- <ContentDoc /> -->
         <IconsBell class="w-6 h-6" />
+
+        <div class="flex items-center gap-3 mb-4">
+            <p>{{ status }} : {{ productCount }}</p>
+            <button class="p-1 bg-cyan-700 border-2" @click="refresh">Refresh</button>
+        </div>
 
         <div class="flex gap-4">
             <img class="w-[200px] block" src="@/assets/hello.jpg" alt="Alt pic">
